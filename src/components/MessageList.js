@@ -1,36 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import Api from "../api";
 import Grid from "@material-ui/core/Grid";
-import { MessagesColumn } from "./MessagesColumn";
+import { Messages } from "./Messages";
 import { useMessages } from "../hooks/useMessages";
-import { Snackbar } from "./Snackbar";
+import { Notification } from "./Notification";
 import { Header } from "./Header";
-import { Actions } from "./Actions";
+import { ActionButtons } from "./ActionButtons";
 import { makeStyles } from "@material-ui/core/styles";
-
-const MESSAGE_CONFIG = {
-  ERROR: {
-    header: "Error Type 1",
-    priority: 1,
-    color: "#F56236",
-  },
-  WARNING: {
-    header: "Warning Type 2",
-    priority: 2,
-    color: "#FCE788",
-  },
-  INFO: {
-    header: "Info Type 3",
-    priority: 3,
-    color: "#88FCA3",
-  },
-};
-
-const useStyles = makeStyles({
-  columns: {
-    padding: "0 10%",
-  },
-});
+import { MESSAGE_TYPES } from '../constants';
 
 export const MessageList = () => {
   const classes = useStyles();
@@ -41,6 +18,8 @@ export const MessageList = () => {
     removeAllMessages,
   } = useMessages();
   const [isApiStarted, setIsApiStarted] = useState(true);
+
+  // Use useRef to keep api instance persistent every time component is updated.
   const api = useRef();
   useEffect(() => {
     api.current = new Api({
@@ -53,23 +32,23 @@ export const MessageList = () => {
   const onToggleAPI = () => {
     if (isApiStarted) {
       api.current.stop();
-      setIsApiStarted(false);
     } else {
       api.current.start();
-      setIsApiStarted(true);
     }
+    setIsApiStarted(value => !value);
   };
+
+  const errorMessages = getMessagesByPriority(MESSAGE_TYPES.ERROR.priority);
+  const lastErrorMessage = errorMessages.slice(-1)[0]
 
   return (
     <Grid container>
-      <Snackbar
-        message={
-          getMessagesByPriority(MESSAGE_CONFIG.ERROR.priority).slice(-1)[0]
-        }
-        color={MESSAGE_CONFIG.ERROR.color}
+      <Notification
+        message={lastErrorMessage}
+        color={MESSAGE_TYPES.ERROR.color}
       />
       <Header />
-      <Actions
+      <ActionButtons
         isApiStarted={isApiStarted}
         onToggleAPI={onToggleAPI}
         onClickClear={removeAllMessages}
@@ -82,8 +61,8 @@ export const MessageList = () => {
         spacing={2}
         className={classes.columns}
       >
-        {Object.values(MESSAGE_CONFIG).map(({ header, priority, color }) => (
-          <MessagesColumn
+        {Object.values(MESSAGE_TYPES).map(({ header, priority, color }) => (
+          <Messages
             messages={getMessagesByPriority(priority)}
             header={header}
             color={color}
@@ -95,3 +74,9 @@ export const MessageList = () => {
     </Grid>
   );
 };
+
+const useStyles = makeStyles({
+  columns: {
+    padding: "0 10%",
+  },
+});

@@ -6,29 +6,9 @@ import PropTypes from "prop-types";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { makeStyles } from "@material-ui/core/styles";
+import { AUTO_HIDE_DURATION } from "../constants";
 
-const useStyles = makeStyles({
-  snackbar: {
-    top: 0,
-    minWidth: "25%",
-  },
-  card: {
-    width: "100%",
-    backgroundColor: ({ color }) => color,
-  },
-  cardContent: {
-    "&:last-child": {
-      padding: "12px",
-    },
-  },
-  button: {
-    marginRight: "10px",
-  },
-});
-
-const AUTO_HIDE_DURATION = 2000;
-
-export const Snackbar = ({ color = "", message = "" }) => {
+export const Notification = ({ color = "", message = "" }) => {
   const classes = useStyles({ color });
   const [open, setOpen] = useState(false);
 
@@ -48,7 +28,7 @@ export const Snackbar = ({ color = "", message = "" }) => {
       open={open}
       autoHideDuration={AUTO_HIDE_DURATION}
       onClose={handleClose}
-      className={classes.snackbar}
+      className={classes.root}
     >
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
@@ -68,7 +48,26 @@ export const Snackbar = ({ color = "", message = "" }) => {
   );
 };
 
-Snackbar.propTypes = {
+const useStyles = makeStyles({
+  root: {
+    top: 0,
+    minWidth: "25%",
+  },
+  card: {
+    width: "100%",
+    backgroundColor: ({ color }) => color,
+  },
+  cardContent: {
+    "&:last-child": {
+      padding: "12px",
+    },
+  },
+  button: {
+    marginRight: "10px",
+  },
+});
+
+Notification.propTypes = {
   message: PropTypes.string,
   color: PropTypes.string,
 };

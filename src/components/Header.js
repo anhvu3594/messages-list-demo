@@ -2,14 +2,6 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 
-const useStyles = makeStyles({
-  root: {
-    fontSize: "30px",
-    paddingBottom: "10px",
-    borderBottom: "1px solid gray",
-  },
-});
-
 export const Header = () => {
   const classes = useStyles();
   return (
@@ -18,3 +10,11 @@ export const Header = () => {
     </Grid>
   );
 };
+
+const useStyles = makeStyles({
+  root: {
+    fontSize: "30px",
+    paddingBottom: "10px",
+    borderBottom: "1px solid gray",
+  },
+});

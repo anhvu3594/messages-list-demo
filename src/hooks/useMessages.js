@@ -6,6 +6,7 @@ export const useMessages = (initMessages = []) => {
   const addMessage = (message) => {
     setMessages((messages) => [message, ...messages]);
   };
+  
   const removeMessage = (clearedMessage) => {
     setMessages((messages) =>
       messages.filter(({ message }) => message !== clearedMessage)

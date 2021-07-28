@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import {useMessages} from '../useMessages'
+import {useMessages} from '../../hooks/useMessages'
 
 const initMessages = [
   {message: "a", priority: 1},
